@@ -1,0 +1,7 @@
+community_token = "vk1.a.0YbeAPGAzDA6iZjz8mtXMmFXL6gi5z92c0LlLp1COnNA0ESflmch5i6OJDwWejrrxO-GTQNwXfJ8yWDqEHIe3CE-vSAmdfDt25JHmoH525nspXK4y-4kvvYlgE8bYKvj-bJ0247t_bt1lkL61sFX6ugE_7d_SavGLWaInVg1EkIvhYqA2N__szNAACFCCDNVAc1HR9wO_k-MYERogfptHw"
+access_token = "vk1.a.ZmqShWvoMuV0GCQq7M4-R4yfnvEFEUpdnekbgfohfL-OvcwS0DXKqMaqHinYnlPNbxdcaIyDtkCeAE6PDTOM0rJZp-NpPNadBlVJyKDUgjaNcDxaTpaG8D3eY0ndPq9y2cewSqp_7JGWjMTdfSpn8pR9ev2-Ltz2SunrziGNiL0rH9FDVtPhRpR0ffBewj4E"
+service_token = "3ce665873ce665873ce665879c3ff2ff0833ce63ce66587587605ad574b1dfc9a0ff71b"
+db_name = "vkinder"
+db_username = "postgres"
+db_password = ""
+db_url_object = f"postgresql+psycopg2://{db_username}:{db_password}@localhost/{db_name}"
