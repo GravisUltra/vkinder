@@ -3,5 +3,5 @@ access_token = "vk1.a.F4wPX1ULcn2VmzFFtncwIZel341pwf761epAjpMn_onbZ4o5CqsB8CspYF
 service_token = "3ce665873ce665873ce665879c3ff2ff0833ce63ce66587587605ad574b1dfc9a0ff71b"
 db_name = "vkinder"
 db_username = "postgres"
-db_password = open("db_password.txt", "r").read()
+db_password = "postgres"
 db_url_object = f"postgresql+psycopg2://{db_username}:{db_password}@localhost/{db_name}"
