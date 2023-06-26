@@ -38,7 +38,6 @@ class BotInterface():
                     if len(profiles) > 0:
                         profile = profiles.pop()
                     else:
-                        # self.message_send(event.user_id, 'Вы уже просмотрели все подходящие анкеты.')
                         profile = None
                         break
         return profile
@@ -62,16 +61,16 @@ class BotInterface():
                         self.message_send(event.user_id, 'Вы уже просмотрели все подходящие анкеты.')
                     else:
                         photos_user = self.api.get_photos(profile['id'])
-                        #добавляем провфиль в список просмотренных
+                        #добавляем профиль в список просмотренных
                         ds.add_profile(user=self.params['id'], profile=profile['id'])          
                         
-                        attachment = ''
+                        attachment = ""
                         for num, photo in enumerate(photos_user):
-                            attachment += f'photo{photo["owner_id"]}_{photo["id"]}'
+                            attachment += f'photo{photo["owner_id"]}_{photo["id"]},'
                             if num == 2:
                                 break
                         self.message_send(event.user_id,
-                                            f'Встречайте: {profile["name"]}',
+                                            f'Встречайте: {profile["name"]}: vk.com/id{profile["id"]}',
                                             attachment=attachment
                                             ) 
 
