@@ -9,11 +9,12 @@ import data_store as ds
 
 class BotInterface():
 
+
     def __init__(self,community_token, access_token):
         self.interface = vk_api.VkApi(token=community_token)
         self.api = VkTools(access_token)
         self.params = None
-
+        self.profiles = []
 
     def message_send(self, user_id, message, attachment=None):
         self.interface.method('messages.send',
@@ -26,17 +27,19 @@ class BotInterface():
         
     def search(self, params, count):
         offset = 0
-        profiles = self.api.search_users(params=params, count=count, offset=offset)
-        if len(profiles) > 0:
-            profile = profiles.pop()
+        if len(self.profiles) <= 0:
+            self.profiles = self.api.search_users(params=params, count=count, offset=offset)
+        
+        if len(self.profiles) > 0:
+            profile = self.profiles.pop()
             while ds.profile_is_viewed_by(profile['id'], self.params['id']):
-                if len(profiles) > 0:
-                    profile = profiles.pop()
+                if len(self.profiles) > 0:
+                    profile = self.profiles.pop()
                 else:
                     offset += count
-                    profiles = profiles = self.api.search_users(params=params, count=count, offset=offset)
-                    if len(profiles) > 0:
-                        profile = profiles.pop()
+                    self.profiles = self.api.search_users(params=params, count=count, offset=offset)
+                    if len(self.profiles) > 0:
+                        profile = self.profiles.pop()
                     else:
                         profile = None
                         break
@@ -60,9 +63,7 @@ class BotInterface():
                     if profile is None:
                         self.message_send(event.user_id, 'Вы уже просмотрели все подходящие анкеты.')
                     else:
-                        photos_user = self.api.get_photos(profile['id'])
-                        #добавляем профиль в список просмотренных
-                        ds.add_profile(user=self.params['id'], profile=profile['id'])          
+                        photos_user = self.api.get_photos(profile['id'])      
                         
                         attachment = ""
                         for num, photo in enumerate(photos_user):
@@ -73,7 +74,8 @@ class BotInterface():
                                             f'Встречайте: {profile["name"]}: vk.com/id{profile["id"]}',
                                             attachment=attachment
                                             ) 
-
+                 #добавляем профиль в список просмотренных
+                        ds.add_profile(user=self.params['id'], profile=profile['id'])    
             
                 elif command == 'пока':
                     self.message_send(event.user_id, 'пока')
@@ -87,4 +89,3 @@ if __name__ == '__main__':
     bot.event_handler()
 
             
-
