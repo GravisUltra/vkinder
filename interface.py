@@ -27,7 +27,7 @@ class BotInterface():
         
     def search(self, params, count):
         offset = 0
-        if len(self.profiles) <= 0:
+        if len(self.profiles) = 0:
             self.profiles = self.api.search_users(params=params, count=count, offset=offset)
         
         if len(self.profiles) > 0:
