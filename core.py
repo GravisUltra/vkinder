@@ -22,7 +22,7 @@ class VkTools():
                      'bdate': info['bdate'] if 'bdate' in info else None,
                      'home_town': info['home_town'],
                      'sex': info['sex'],
-                     'city': info['city']['id']
+                     'city': info['city']['name']
                      }
         return user_info
     

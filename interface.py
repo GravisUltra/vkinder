@@ -27,7 +27,7 @@ class BotInterface():
         
     def search(self, params, count):
         offset = 0
-        if len(self.profiles) = 0:
+        if len(self.profiles) == 0:
             self.profiles = self.api.search_users(params=params, count=count, offset=offset)
         
         if len(self.profiles) > 0:
@@ -48,35 +48,54 @@ class BotInterface():
         
     def event_handler(self):
         longpoll = VkLongPoll(self.interface)
+        input_mode = "waiting for greeting"
+        self.params = None
 
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                 command = event.text.lower()
 
-                if command == 'привет' or command == 'здравствуйте':
+                if input_mode == "city":
+                    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                        self.params['city'] = event.text
+
+                elif command == 'привет' or command == 'здравствуйте':
                     self.params = self.api.get_profile_info(event.user_id)
                     self.message_send(event.user_id, f'Здравствуйте, {self.params["name"]}')
+                    print(self.params)
+                    if self.params['city'] == None:
+                        self.message_send(event.user_id, f'В каком городе Вы находитесь?')
+                        input_mode = "city"
+                    elif self.params['bdate'] == None:
+                        pass
+                    else:
+                        input_mode = "ready"
+
 
                 elif command == 'поиск':
-                    count = 50
-                    profile = self.search(self.params, count)
-                    if profile is None:
-                        self.message_send(event.user_id, 'Вы уже просмотрели все подходящие анкеты.')
-                    else:
-                        photos_user = self.api.get_photos(profile['id'])      
+                    if input_mode == "ready":
+                        count = 50
+                        profile = self.search(self.params, count)
+                        if profile is None:
+                            self.message_send(event.user_id, 'Вы уже просмотрели все подходящие анкеты.')
+                        else:
+                            photos_user = self.api.get_photos(profile['id'])      
+                            
+                            attachment = ""
+                            for num, photo in enumerate(photos_user):
+                                attachment += f'photo{photo["owner_id"]}_{photo["id"]},'
+                                if num == 2:
+                                    break
+                            self.message_send(event.user_id,
+                                                f'Встречайте: {profile["name"]}: vk.com/id{profile["id"]}',
+                                                attachment=attachment
+                                                ) 
+                            #добавляем профиль в список просмотренных
+                            ds.add_profile(user=self.params['id'], profile=profile['id'])
                         
-                        attachment = ""
-                        for num, photo in enumerate(photos_user):
-                            attachment += f'photo{photo["owner_id"]}_{photo["id"]},'
-                            if num == 2:
-                                break
-                        self.message_send(event.user_id,
-                                            f'Встречайте: {profile["name"]}: vk.com/id{profile["id"]}',
-                                            attachment=attachment
-                                            ) 
-                 #добавляем профиль в список просмотренных
-                        ds.add_profile(user=self.params['id'], profile=profile['id'])    
-            
+                    else:
+                        self.message_send(event.user_id, 'Сначала нужно поздороваться!')
+
                 elif command == 'пока':
                     self.message_send(event.user_id, 'пока')
                 else:
