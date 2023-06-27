@@ -22,7 +22,7 @@ class VkTools():
                      'bdate': info['bdate'] if 'bdate' in info else None,
                      'home_town': info['home_town'],
                      'sex': info['sex'],
-                     'city': info['city']['name']
+                     'city': info['home_town']
                      }
         return user_info
     
@@ -42,7 +42,7 @@ class VkTools():
                                  'age_from': age_from,
                                  'age_to': age_to,
                                  'sex': sex,
-                                 'city': city,
+                                 'home_town': city,
                                  'status': 6,
                                  'is_closed': False
                                 }
@@ -93,6 +93,6 @@ class VkTools():
 if __name__ == '__main__':
     bot = VkTools(access_token)
     params = bot.get_profile_info(789657038)
-    users = bot.search_users(params)
+    users = bot.search_users(params, count=10, offset=0)
     print(bot.get_photos(users[2]['id']))
 

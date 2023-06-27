@@ -58,12 +58,14 @@ class BotInterface():
                 if input_mode == "city":
                     if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                         self.params['city'] = event.text
+                        self.message_send(event.user_id, f'Итак, ваш город: {self.params["city"]}')
+                        input_mode = 'ready'
 
                 elif command == 'привет' or command == 'здравствуйте':
                     self.params = self.api.get_profile_info(event.user_id)
                     self.message_send(event.user_id, f'Здравствуйте, {self.params["name"]}')
                     print(self.params)
-                    if self.params['city'] == None:
+                    if self.params['city'] == '':
                         self.message_send(event.user_id, f'В каком городе Вы находитесь?')
                         input_mode = "city"
                     elif self.params['bdate'] == None:
