@@ -56,10 +56,20 @@ class BotInterface():
                 command = event.text.lower()
 
                 if input_mode == "city":
-                    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                        self.params['city'] = event.text
-                        self.message_send(event.user_id, f'Итак, ваш город: {self.params["city"]}')
-                        input_mode = 'ready'
+                    self.params['city'] = event.text
+                    self.message_send(event.user_id, f'Итак, ваш город: {self.params["city"]}')
+                    input_mode = 'ready'
+                if input_mode == "city":
+                    self.params['year'] = event.text
+                    input_mode = "ready"
+                if input_mode == "sex":
+                    if event.text.strip()[0].lower() in 'mм':
+                        self.params['sex'] = 2
+                    elif event.text.strip()[0].lower() in 'fж':
+                        self.params['sex'] = 1
+                    else:
+                        self.message_send(event.user_id, f'Попробуйте ещё раз.')
+                
 
                 elif command == 'привет' or command == 'здравствуйте':
                     self.params = self.api.get_profile_info(event.user_id)
@@ -69,9 +79,14 @@ class BotInterface():
                         self.message_send(event.user_id, f'В каком городе Вы находитесь?')
                         input_mode = "city"
                     elif self.params['bdate'] == None:
-                        pass
+                        self.message_send(event.user_id, f'Пожалуйста, введите дату вашего рождения в формате ДД.ММ.ГГГГ:')
+                        input_mode = "bdate"
+                    elif self.params['sext'] == 0:
+                        self.message_send(event.user_id, 'Укажите ваш пол: м, m - мужской, f, ж - женский')
+                        input_mode = "sex"
                     else:
                         input_mode = "ready"
+
 
 
                 elif command == 'поиск':
