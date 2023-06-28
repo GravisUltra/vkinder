@@ -81,7 +81,7 @@ class BotInterface():
                     elif self.params['bdate'] == None:
                         self.message_send(event.user_id, f'Пожалуйста, введите дату вашего рождения в формате ДД.ММ.ГГГГ:')
                         input_mode = "bdate"
-                    elif self.params['sext'] == 0:
+                    elif self.params['sex'] == 0:
                         self.message_send(event.user_id, 'Укажите ваш пол: м, m - мужской, f, ж - женский')
                         input_mode = "sex"
                     else:
