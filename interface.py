@@ -65,8 +65,10 @@ class BotInterface():
                 if input_mode == "sex":
                     if event.text.strip()[0].lower() in 'mм':
                         self.params['sex'] = 2
+                        input_mode = "ready"
                     elif event.text.strip()[0].lower() in 'fж':
                         self.params['sex'] = 1
+                        input_mode = "ready"
                     else:
                         self.message_send(event.user_id, f'Попробуйте ещё раз.')
                 
