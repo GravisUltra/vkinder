@@ -27,12 +27,12 @@ class VkTools():
         return user_info
     
     def search_users(self, params, count, offset):
-
+        print("search_users")
+        print(params)
         sex = 1 if params['sex'] == 2 else 2
         city = params['city']
-        curent_year = datetime.now().year
-        user_year = int(params['bdate'].split('.')[2])
-        age = curent_year - user_year
+        
+        age = params['age']
         age_from = age - 5
         age_to = age + 5
 
@@ -93,6 +93,7 @@ class VkTools():
 if __name__ == '__main__':
     bot = VkTools(access_token)
     params = bot.get_profile_info(789657038)
+    params['age'] = 30
     users = bot.search_users(params, count=10, offset=0)
     print(bot.get_photos(users[2]['id']))
 
