@@ -40,20 +40,12 @@ class BotInterface():
             if subevent.type == VkEventType.MESSAGE_NEW and subevent.to_me:
                 return subevent.text
             
-
-    def ask_bdate(self):
-        sublongpoll = VkLongPoll(self.interface)
-        for subevent in sublongpoll.listen():
-            if subevent.type == VkEventType.MESSAGE_NEW and subevent.to_me:
-                return subevent.text
-            
     def input_text(self):
         sublongpoll = VkLongPoll(self.interface)
         for subevent in sublongpoll.listen():
             if subevent.type == VkEventType.MESSAGE_NEW and subevent.to_me:
                 return {'user_id': subevent.user_id,
                         'text': subevent.text}
-
 
     
     def ask_age(self):
@@ -146,7 +138,7 @@ class BotInterface():
                         self.message_send(user_id, f'Итак, ваш город: {self.params["city"]}')
                         
                     if self.params['age'] == None:
-                        self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лет).')
+                        self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лети).')
                         self.params['age'] = self.ask_age()
                         self.message_send(user_id, f'Итак, ваш возраст: {self.params["age"]}')
 
