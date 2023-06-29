@@ -138,7 +138,7 @@ class BotInterface():
                         self.message_send(user_id, f'Итак, ваш город: {self.params["city"]}')
                         
                     if self.params['age'] == None:
-                        self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лети).')
+                        self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лет).')
                         self.params['age'] = self.ask_age()
                         self.message_send(user_id, f'Итак, ваш возраст: {self.params["age"]}')
 
@@ -174,9 +174,9 @@ class BotInterface():
                         self.message_send(user_id, 'Сначала нужно поздороваться!')
 
                 elif command == 'пока':
-                    self.message_send(user_id, 'пока')
+                    self.message_send(user_id, 'Пока!')
                 else:
-                    self.message_send(user_id, f'команда "{command}" не опознана')
+                    self.message_send(user_id, f'Команда "{command}" не опознана.')
 
 
 
