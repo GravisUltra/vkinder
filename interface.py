@@ -50,49 +50,64 @@ class BotInterface():
         longpoll = VkLongPoll(self.interface)
         input_mode = "waiting for greeting"
         self.params = None
+        waiting_for_greeting = True
+        no_city = False
+        no_bdate = False
+        no_sex = False
 
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                 command = event.text.lower()
-
-                if input_mode == "city":
+                print(self.params)
+                if no_city:
                     self.params['city'] = event.text
                     self.message_send(event.user_id, f'Итак, ваш город: {self.params["city"]}')
-                    input_mode = 'ready'
-                if input_mode == "city":
-                    self.params['year'] = event.text
-                    input_mode = "ready"
-                if input_mode == "sex":
+                    no_city = False
+                elif no_bdate:
+                    self.params['bdate'] = event.text
+                    self.message_send(event.user_id, f'Итак, дата вашего рождения: {self.params["bdate"]}')
+                    no_bdate = False
+                elif no_sex:
                     if event.text.strip()[0].lower() in 'mм':
                         self.params['sex'] = 2
-                        input_mode = "ready"
+                        self.message_send(event.user_id, 'Итак, Вы мужчина.')
+                        no_sex = False
                     elif event.text.strip()[0].lower() in 'fж':
                         self.params['sex'] = 1
-                        input_mode = "ready"
+                        self.message_send(event.user_id, 'Итак, Вы женщина.')
+                        no_sex = False
                     else:
                         self.message_send(event.user_id, f'Попробуйте ещё раз.')
                 
-
+            
                 elif command == 'привет' or command == 'здравствуйте':
-                    self.params = self.api.get_profile_info(event.user_id)
+                    if self.params is None:
+                        self.params = self.api.get_profile_info(event.user_id)
+                        '''Следующие три строки нужны только для тестирования.
+                        Для нормального использования программы
+                        их нужно удалить или закомментировать.'''
+                        self.params['city'] = ''
+                        self.params['bdate'] = None
+                        self.params['sex'] = 0
                     self.message_send(event.user_id, f'Здравствуйте, {self.params["name"]}')
-                    print(self.params)
+                    
+                    
                     if self.params['city'] == '':
                         self.message_send(event.user_id, f'В каком городе Вы находитесь?')
-                        input_mode = "city"
+                        no_city = True
                     elif self.params['bdate'] == None:
                         self.message_send(event.user_id, f'Пожалуйста, введите дату вашего рождения в формате ДД.ММ.ГГГГ:')
-                        input_mode = "bdate"
+                        no_bdate = True
                     elif self.params['sex'] == 0:
                         self.message_send(event.user_id, 'Укажите ваш пол: м, m - мужской, f, ж - женский')
-                        input_mode = "sex"
+                        no_sex = True
                     else:
-                        input_mode = "ready"
-
-
+                        waiting_for_greeting = False
+                        self.message_send(event.user_id, 'Готово. Теперь Вы можете использовать команду "Поиск"')
+                    print(self.params)
 
                 elif command == 'поиск':
-                    if input_mode == "ready":
+                    if not waiting_for_greeting:
                         count = 50
                         profile = self.search(self.params, count)
                         if profile is None:
