@@ -35,25 +35,49 @@ class VkTools():
         age_from = age - 5
         age_to = age + 5
 
-        users = self.api.method('users.search',
-                                {'count': count,
-                                 'offset': offset,
-                                 'age_from': age_from,
-                                 'age_to': age_to,
-                                 'sex': sex,
-                                 'home_town': city,
-                                 'status': 6,
-                                 'is_closed': False
-                                }
-                            )
-        try:
-            users = users['items']
-        except KeyError:
-            return []
+        thousands = count // 1000
+        remainder = count % 1000
+
+        users_list = []
+
+        for i in range(1, thousands):
+            users = self.api.method('users.search',
+                                    {'count': 1000,
+                                    'offset': offset,
+                                    'age_from': age_from,
+                                    'age_to': age_to,
+                                    'sex': sex,
+                                    'home_town': city,
+                                    'status': 6,
+                                    'is_closed': False
+                                    }
+                                )
+            offset += i * 1000
+            try:
+                users_list += users['items']
+            except KeyError:
+                break
+        if remainder != 0:
+            users = self.api.method('users.search',
+                                    {'count': remainder,
+                                    'offset': offset,
+                                    'age_from': age_from,
+                                    'age_to': age_to,
+                                    'sex': sex,
+                                    'home_town': city,
+                                    'status': 6,
+                                    'is_closed': False
+                                    }
+                                )
+            offset += remainder
+            try:
+                users_list += users['items']
+            except KeyError:
+                pass
         
         res = []
 
-        for user in users:
+        for user in users_list:
             if user['is_closed'] == False:
                 res.append({'id' : user['id'],
                             'name': user['first_name'] + ' ' + user['last_name']
