@@ -164,7 +164,7 @@ class BotInterface():
                                 if num == 2:
                                     break
                             self.message_send(user_id,
-                                                f'Встречайте: {profile["name"]}: vk.com/id{profile["id"]}',
+                                                f'Встречайте: {profile["name"]}\n vk.com/id{profile["id"]}',
                                                 attachment=attachment
                                                 ) 
                             #добавляем профиль в список просмотренных
