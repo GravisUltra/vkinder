@@ -31,13 +31,12 @@ class VkTools():
         print(params)
         sex = 1 if params['sex'] == 2 else 2
         city = params['city']
-        
         age = params['age']
         age_from = age - 5
         age_to = age + 5
 
         users = self.api.method('users.search',
-                                {'count': 50,
+                                {'count': count,
                                  'offset': offset,
                                  'age_from': age_from,
                                  'age_to': age_to,
@@ -89,7 +88,7 @@ class VkTools():
 
         return res
 
-
+# просто тествовый код
 if __name__ == '__main__':
     bot = VkTools(access_token)
     params = bot.get_profile_info(789657038)
