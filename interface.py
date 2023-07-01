@@ -151,7 +151,6 @@ class BotInterface():
 
                 elif command == 'поиск':
                     if not waiting_for_greeting:
-                        count = 50
                         profile = self.search(self.params, count)
                         if profile is None:
                             self.message_send(user_id, 'Вы уже просмотрели все подходящие анкеты.')
@@ -179,6 +178,8 @@ class BotInterface():
                     self.message_send(user_id, f'Команда "{command}" не опознана.')
 
 
+# демонстрация обхода ограничения на количесвтво профилей, выдаваемых методом "searc" VF API 
+count = 1500
 
 if __name__ == '__main__':
     bot = BotInterface(community_token, access_token)
