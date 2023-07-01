@@ -27,8 +27,6 @@ class VkTools():
         return user_info
     
     def search_users(self, params, count, offset):
-        print("search_users")
-        print(params)
         sex = 1 if params['sex'] == 2 else 2
         city = params['city']
         age = params['age']
@@ -116,7 +114,7 @@ class VkTools():
 
         return res
 
-# просто тествовый код
+# просто тестовый код
 if __name__ == '__main__':
     bot = VkTools(access_token)
     params = bot.get_profile_info(789657038)
