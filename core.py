@@ -52,11 +52,15 @@ class VkTools():
                                     'is_closed': False
                                     }
                                 )
-            offset += i * 1000
+
             try:
                 users_list += users['items']
             except KeyError:
                 break
+            else:
+                offset += i * 1000
+
+
         if remainder != 0:
             users = self.api.method('users.search',
                                     {'count': remainder,
