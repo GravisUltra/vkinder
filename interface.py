@@ -82,6 +82,33 @@ class BotInterface():
                 else:
                     self.message_send(subevent.user_id, f'Попробуйте ещё раз.')
 
+    def check_and_fill_params(self, params):
+        user_id = params['id']
+        if params['bdate'] != None:
+            user_year = int(params['bdate'].split('.')[2])
+            current_year = datetime.now().year
+            params['age'] = current_year - user_year
+        else:
+            params['age'] = None
+        
+        
+        if params['city'] == '':
+            self.message_send(user_id, f'В каком городе Вы живёте?')
+            params['city'] = self.ask_city()
+            self.message_send(user_id, f'Итак, ваш город: {params["city"]}')
+            
+        if self.params['age'] == None:
+            self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лет).')
+            params['age'] = self.ask_age()
+            self.message_send(user_id, f'Итак, ваш возраст: {params["age"]}')
+
+        if self.params['sex'] == 0:
+            self.message_send(user_id, f'Укажите ваш пол: м, m - мужской; f, ж - женский')
+            params['sex'] = self.ask_sex()
+            
+        return params
+                        
+
         
     def search(self, params, count):
         offset = 0
@@ -120,34 +147,15 @@ class BotInterface():
                         '''Следующие три строки нужны только для тестирования.
                         Для нормального использования программы
                         их нужно удалить или закомментировать.'''
-                        self.params['city'] = ''
-                        self.params['bdate'] = None
-                        self.params['sex'] = 0
+                        # self.params['city'] = ''
+                        # self.params['bdate'] = None
+                        # self.params['sex'] = 0
                     self.message_send(user_id, f'Здравствуйте, {self.params["name"]}')
-                    if self.params['bdate'] != None:
-                        user_year = int(self.params['bdate'].split('.')[2])
-                        current_year = datetime.now().year
-                        self.params['age'] = current_year - user_year
-                    else:
-                        self.params['age'] = None
-                    
-                    
-                    if self.params['city'] == '':
-                        self.message_send(user_id, f'В каком городе Вы живёте?')
-                        self.params['city'] = self.ask_city()
-                        self.message_send(user_id, f'Итак, ваш город: {self.params["city"]}')
-                        
-                    if self.params['age'] == None:
-                        self.message_send(user_id, f'Пожалуйста, введите ваш возраст (от 18 до 100 лет).')
-                        self.params['age'] = self.ask_age()
-                        self.message_send(user_id, f'Итак, ваш возраст: {self.params["age"]}')
-
-                    if self.params['sex'] == 0:
-                        self.message_send(user_id, f'Укажите ваш пол: м, m - мужской; f, ж - женский')
-                        self.params['sex'] = self.ask_sex()
-                        waiting_for_greeting = False
-                        self.message_send(user_id, 'Готово. Теперь Вы можете использовать команду "Поиск"')
-                    print(self.params)
+                    # print("До проверрки:", self.params)
+                    self.params = self.check_and_fill_params(self.params)
+                    waiting_for_greeting = False
+                    self.message_send(user_id, 'Готово. Теперь Вы можете использовать команду "Поиск"')
+                    # print("После проверки:", self.params)
 
                 elif command == 'поиск':
                     if not waiting_for_greeting:
