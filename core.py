@@ -30,17 +30,18 @@ class VkTools():
         sex = 1 if params['sex'] == 2 else 2
         city = params['city']
         age = params['age']
-        age_from = age - 5
-        age_to = age + 5
+        age_from = age - 20
+        age_to = age + 20
 
-        thousands = count // 1000
-        remainder = count % 1000
+        step = 99
+        full_step = count // step
+        remainder = count % step
 
         users_list = []
 
-        for i in range(1, thousands):
+        for i in range(full_step):
             users = self.api.method('users.search',
-                                    {'count': 1000,
+                                    {'count': step,
                                     'offset': offset,
                                     'age_from': age_from,
                                     'age_to': age_to,
@@ -56,7 +57,8 @@ class VkTools():
             except KeyError:
                 break
             else:
-                offset += i * 1000
+                offset += i * 100
+        print('After fifties', len(users_list))
 
 
         if remainder != 0:
@@ -76,9 +78,9 @@ class VkTools():
                 users_list += users['items']
             except KeyError:
                 pass
+            print("After remainder:", len(users_list))
         
         res = []
-
         for user in users_list:
             if user['is_closed'] == False:
                 res.append({'id' : user['id'],
@@ -122,6 +124,6 @@ if __name__ == '__main__':
     current_year = datetime.now().year
     params['age'] = current_year - user_year
     print(params)
-    users = bot.search_users(params, count=10, offset=0)
+    users = bot.search_users(params, count=149, offset=0)
     print(bot.get_photos(users[2]['id']))
 

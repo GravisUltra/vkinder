@@ -91,7 +91,6 @@ class BotInterface():
         else:
             params['age'] = None
         
-        
         if params['city'] == '':
             self.message_send(user_id, f'В каком городе Вы живёте?')
             params['city'] = self.ask_city()
@@ -148,7 +147,7 @@ class BotInterface():
                         Для нормального использования программы
                         их нужно удалить или закомментировать.'''
                         # self.params['city'] = ''
-                        # self.params['bdate'] = None
+                        self.params['bdate'] = None
                         # self.params['sex'] = 0
                     self.message_send(user_id, f'Здравствуйте, {self.params["name"]}')
                     # print("До проверрки:", self.params)
@@ -187,7 +186,7 @@ class BotInterface():
 
 
 # демонстрация обхода ограничения на количесвтво профилей, выдаваемых методом "searc" VF API 
-count = 1500
+count = 1501
 
 if __name__ == '__main__':
     bot = BotInterface(community_token, access_token)
