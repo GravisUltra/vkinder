@@ -34,14 +34,14 @@ class VkTools():
         age_from = age - 5
         age_to = age + 5
 
-        step = 500
-        delay = 1
+        step = 300
+        delay = 0.5
         full_steps = count // step
         remainder = count % step
 
         users_list = []
 
-        for i in range(full_steps + 1):
+        for i in range(full_steps):
             print("Full step iteration ", i + 1)
             users = self.api.method('users.search',
                                     {'count': step,
@@ -131,6 +131,6 @@ if __name__ == '__main__':
     current_year = datetime.now().year
     params['age'] = current_year - user_year
     print(params)
-    users = bot.search_users(params, count=3300, offset=0)
+    users = bot.search_users(params, count=360, offset=0)
     print(bot.get_photos(users[2]['id']))
 

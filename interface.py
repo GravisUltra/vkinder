@@ -158,6 +158,7 @@ class BotInterface():
 
                 elif command == 'поиск':
                     if not waiting_for_greeting:
+                        self.message_send(user_id, 'Ищу...')
                         profile = self.search(self.params, count)
                         if profile is None:
                             self.message_send(user_id, 'Вы уже просмотрели все подходящие анкеты.')
@@ -185,7 +186,7 @@ class BotInterface():
                     self.message_send(user_id, f'Команда "{command}" не опознана.')
 
 
-# демонстрация обхода ограничения на количесвтво профилей, выдаваемых методом "searc" VF API 
+# демонстрация обхода ограничения на количесвтво профилей, выдаваемых методом "search" VK API 
 count = 1501
 
 if __name__ == '__main__':
