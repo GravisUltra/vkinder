@@ -1,4 +1,5 @@
-from datetime import datetime 
+from datetime import datetime
+import time
 
 import vk_api
 
@@ -30,16 +31,18 @@ class VkTools():
         sex = 1 if params['sex'] == 2 else 2
         city = params['city']
         age = params['age']
-        age_from = age - 20
-        age_to = age + 20
+        age_from = age - 5
+        age_to = age + 5
 
-        step = 99
-        full_step = count // step
+        step = 500
+        pause = 1
+        full_steps = count // step
         remainder = count % step
 
         users_list = []
 
-        for i in range(full_step):
+        for i in range(full_steps + 1):
+            print("Full step iteration ", i + 1)
             users = self.api.method('users.search',
                                     {'count': step,
                                     'offset': offset,
@@ -51,35 +54,19 @@ class VkTools():
                                     'is_closed': False
                                     }
                                 )
+            if len(users['items']) == 0:
+                   break
 
             try:
                 users_list += users['items']
             except KeyError:
                 break
             else:
-                offset += i * 100
-        print('After fifties', len(users_list))
+                offset += len(users['items'])
+                print(len(users['items']))
+            time.sleep(pause)
+        print('After full steps', len(users_list))
 
-
-        if remainder != 0:
-            users = self.api.method('users.search',
-                                    {'count': remainder,
-                                    'offset': offset,
-                                    'age_from': age_from,
-                                    'age_to': age_to,
-                                    'sex': sex,
-                                    'home_town': city,
-                                    'status': 6,
-                                    'is_closed': False
-                                    }
-                                )
-            offset += remainder
-            try:
-                users_list += users['items']
-            except KeyError:
-                pass
-            print("After remainder:", len(users_list))
-        
         res = []
         for user in users_list:
             if user['is_closed'] == False:
@@ -124,6 +111,6 @@ if __name__ == '__main__':
     current_year = datetime.now().year
     params['age'] = current_year - user_year
     print(params)
-    users = bot.search_users(params, count=149, offset=0)
+    users = bot.search_users(params, count=3300, offset=0)
     print(bot.get_photos(users[2]['id']))
 
