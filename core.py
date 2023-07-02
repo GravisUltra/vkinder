@@ -35,7 +35,7 @@ class VkTools():
         age_to = age + 5
 
         step = 500
-        pause = 1
+        delay = 1
         full_steps = count // step
         remainder = count % step
 
@@ -64,7 +64,7 @@ class VkTools():
             else:
                 offset += len(users['items'])
                 print(len(users['items']))
-            time.sleep(pause)
+            time.sleep(delay)
         print('After full steps', len(users_list))
 
 

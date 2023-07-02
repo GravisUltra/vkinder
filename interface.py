@@ -17,6 +17,7 @@ class BotInterface():
         self.params = None
         self.profiles = []
 
+
     def message_send(self, user_id, message, attachment=None):
         self.interface.method('messages.send',
                                 {'user_id': user_id,
@@ -26,6 +27,7 @@ class BotInterface():
                                 }
                                 )
         
+
     def get_command(self):
         sulongpoll = VkLongPoll(self.interface)
         for subevent in sulongpoll.listen():
@@ -40,13 +42,13 @@ class BotInterface():
             if subevent.type == VkEventType.MESSAGE_NEW and subevent.to_me:
                 return subevent.text
             
+
     def input_text(self):
         sublongpoll = VkLongPoll(self.interface)
         for subevent in sublongpoll.listen():
             if subevent.type == VkEventType.MESSAGE_NEW and subevent.to_me:
                 return {'user_id': subevent.user_id,
                         'text': subevent.text}
-
     
     def ask_age(self):
         age = 0
@@ -63,10 +65,8 @@ class BotInterface():
                 self.message_send(user_id, f'Некорректно указан возраст. Попробуйте ещё раз.')
                 age = 0
         return age
-                 
-                    
-                
-            
+
+         
     def ask_sex(self):
         sublongpoll = VkLongPoll(self.interface)
         for subevent in sublongpoll.listen():
@@ -81,6 +81,7 @@ class BotInterface():
                     return 1
                 else:
                     self.message_send(subevent.user_id, f'Попробуйте ещё раз.')
+
 
     def check_and_fill_params(self, params):
         user_id = params['id']
@@ -106,8 +107,7 @@ class BotInterface():
             params['sex'] = self.ask_sex()
             
         return params
-                        
-
+    
         
     def search(self, params, count):
         offset = 0
@@ -129,7 +129,7 @@ class BotInterface():
                         break
         return profile
 
-        
+
     def event_handler(self):
         longpoll = VkLongPoll(self.interface)
         self.params = None
@@ -192,4 +192,3 @@ if __name__ == '__main__':
     bot = BotInterface(community_token, access_token)
     bot.event_handler()
 
-            
