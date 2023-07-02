@@ -35,12 +35,14 @@ class VkTools():
         age_to = age + 5
 
         step = 500
-        delay = 1
-        steps = count // step
+        pause = 1
+        full_steps = count // step
+        remainder = count % step
+
         users_list = []
 
-        for i in range(steps + 1):
-            print("Step", i + 1)
+        for i in range(full_steps + 1):
+            print("Full step iteration ", i + 1)
             users = self.api.method('users.search',
                                     {'count': step,
                                     'offset': offset,
@@ -54,6 +56,7 @@ class VkTools():
                                 )
             if len(users['items']) == 0:
                    break
+
             try:
                 users_list += users['items']
             except KeyError:
@@ -61,9 +64,29 @@ class VkTools():
             else:
                 offset += len(users['items'])
                 print(len(users['items']))
-            time.sleep(delay)
-        print('After all steps', len(users_list))
+            time.sleep(pause)
+        print('After full steps', len(users_list))
 
+
+        if remainder != 0:
+            users = self.api.method('users.search',
+                                    {'count': remainder,
+                                    'offset': offset,
+                                    'age_from': age_from,
+                                    'age_to': age_to,
+                                    'sex': sex,
+                                    'home_town': city,
+                                    'status': 6,
+                                    'is_closed': False
+                                    }
+                                )
+            offset += remainder
+            try:
+                users_list += users['items']
+            except KeyError:
+                pass
+        print("After remainder:", len(users_list))
+        
         res = []
         for user in users_list:
             if user['is_closed'] == False:
