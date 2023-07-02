@@ -147,7 +147,7 @@ class BotInterface():
                         Для нормального использования программы
                         их нужно удалить или закомментировать.'''
                         # self.params['city'] = ''
-                        self.params['bdate'] = None
+                        # self.params['bdate'] = None
                         # self.params['sex'] = 0
                     self.message_send(user_id, f'Здравствуйте, {self.params["name"]}')
                     # print("До проверрки:", self.params)
