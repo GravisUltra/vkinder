@@ -36,12 +36,12 @@ class VkTools():
 
         step = 500
         delay = 1
-        full_steps = count // step
+        steps = count // step
 
         users_list = []
 
-        for i in range(full_steps + 1):
-            print("Full step iteration ", i + 1)
+        for i in range(steps + 1):
+            print("Step", i + 1)
             users = self.api.method('users.search',
                                     {'count': step,
                                     'offset': offset,
@@ -64,7 +64,7 @@ class VkTools():
                 offset += len(users['items'])
                 print(len(users['items']))
             time.sleep(delay)
-        print('After full steps', len(users_list))
+        print('After all steps', len(users_list))
 
         res = []
         for user in users_list:
