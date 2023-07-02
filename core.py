@@ -37,7 +37,6 @@ class VkTools():
         step = 500
         delay = 1
         steps = count // step
-
         users_list = []
 
         for i in range(steps + 1):
@@ -55,7 +54,6 @@ class VkTools():
                                 )
             if len(users['items']) == 0:
                    break
-
             try:
                 users_list += users['items']
             except KeyError:
