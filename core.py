@@ -118,7 +118,10 @@ class VkTools():
 if __name__ == '__main__':
     bot = VkTools(access_token)
     params = bot.get_profile_info(789657038)
-    params['age'] = 30
+    user_year = int(params['bdate'].split('.')[2])
+    current_year = datetime.now().year
+    params['age'] = current_year - user_year
+    print(params)
     users = bot.search_users(params, count=10, offset=0)
     print(bot.get_photos(users[2]['id']))
 
